@@ -1,10 +1,12 @@
-import { Definitions, GridCell } from "../definitions";
+import { Definitions } from "../definitions";
 
 class MainScene extends Phaser.Scene {
     ball?: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
     grid?: Phaser.Physics.Arcade.StaticGroup;
+    shooterContainer?: Phaser.GameObjects.Container;
     shooterLeg?: Phaser.GameObjects.Sprite;
     isShooting: boolean = false;
+    isBallInAir: boolean = false;
 
     constructor() {
         super({ key: "MainScene" });
@@ -21,9 +23,25 @@ class MainScene extends Phaser.Scene {
         this.createBall();
         this.createShooter();
 
-        this.input.on("pointerdown", () => {
-            this.kickAnimation();
+        this.input.on("pointerdown", (point: any) => {
+            this.onPointerDown(point);
         });
+
+        this.input.on("pointermove", (pointer: Phaser.Input.Pointer) => {
+            this.shooterContainer?.setPosition(
+                pointer.x,
+                this.shooterContainer.y
+            );
+
+            if (!this.isBallInAir)
+                this.ball?.setPosition(pointer.x + 170, this.ball.y);
+        });
+    }
+
+    update() {
+        if (this.ball?.body.blocked.down) {
+            this.resetBall();
+        }
     }
 
     private createGrid() {
@@ -76,6 +94,7 @@ class MainScene extends Phaser.Scene {
 
     private createBall() {
         this.ball = this.physics.add.image(1130, 920, "ball");
+        this.setBallGlow(0xffdd1f);
         this.ball.setDisplaySize(Definitions.ball.size, Definitions.ball.size);
         this.ball.setCollideWorldBounds(true);
         this.ball.setBounce(1);
@@ -83,23 +102,46 @@ class MainScene extends Phaser.Scene {
         this.physics.add.collider(this.ball, this.grid!, this.onCollide);
     }
 
+    private setBallGlow(color: number) {
+        this.ball?.clearFX();
+        this.ball?.preFX?.addGlow(color);
+    }
+
+    private resetBall() {
+        this.setBallGlow(0xffdd1f);
+        this.ball?.setVelocity(0, 0);
+
+        this.tweens.add({
+            targets: this.ball,
+            x: this.shooterContainer!.x + 170,
+            y: 920,
+            duration: 100,
+            onComplete: () => {
+                this.isBallInAir = false;
+            },
+        });
+    }
+
     private createShooter() {
         const shooterContainer = this.add.container(
             this.game.canvas.width / 2,
-            this.game.canvas.height - 100
+            this.game.canvas.height
         );
 
-        const shooter = this.add.sprite(0, 100, "shooter");
+        const shooter = this.add.sprite(0, 0, "shooter");
+        shooter.postFX?.addGlow();
         shooter.setOrigin(0.5, 1);
         shooter.setScale(Definitions.shooter.body.scale);
         shooterContainer.add(shooter);
 
-        const shooterLeg = this.add.sprite(-7, -53, "shooterLeg");
+        const shooterLeg = this.add.sprite(-7, -170, "shooterLeg");
+        shooterLeg.postFX?.addGlow();
         shooterLeg.setOrigin(0, 0);
         shooterLeg.setScale(Definitions.shooter.leg.scale);
         shooterContainer.add(shooterLeg);
 
         this.shooterLeg = shooterLeg;
+        this.shooterContainer = shooterContainer;
     }
 
     private kickAnimation() {
@@ -116,7 +158,7 @@ class MainScene extends Phaser.Scene {
             },
 
             onYoyo: () => {
-                this.onPointerDown(this.input.activePointer);
+                this.shootBall();
             },
         });
     }
@@ -134,24 +176,19 @@ class MainScene extends Phaser.Scene {
         const rect = cell as Phaser.GameObjects.Rectangle;
         const cellRect = rect.getData("text") as Phaser.GameObjects.Text;
 
-        rect.fillColor = Phaser.Display.Color.RandomRGB().color;
-
         rect.destroy();
         cellRect.destroy();
     };
 
+    private shootBall() {
+        this.physics.velocityFromAngle(-60, 1000, this.ball?.body.velocity);
+        this.setBallGlow(0x00ff00);
+
+        this.isBallInAir = true;
+    }
+
     private onPointerDown = (pointer: Phaser.Input.Pointer) => {
-        this.physics.velocityFromAngle(
-            // Phaser.Math.Angle.Between(
-            //     this.ball!.x,
-            //     this.ball!.y,
-            //     pointer.x,
-            //     pointer.y
-            // ),
-            -60,
-            1000,
-            this.ball?.body.velocity
-        );
+        if (!this.isShooting && !this.isBallInAir) this.kickAnimation();
     };
 }
 

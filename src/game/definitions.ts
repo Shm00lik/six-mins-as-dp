@@ -1,8 +1,8 @@
 export const Definitions = {
     grid: {
-        rows: 10,
+        rows: 15,
         cols: 10,
-        gridHeight: 0.5,
+        gridHeight: 0.7,
 
         rolesList: [
             "מעבד נתונים",
@@ -31,6 +31,7 @@ export const Definitions = {
             "צלם מדיה",
             "אחראי עידוד",
             "קמע",
+            "לוגיסטיקה",
         ],
 
         rolesTextStyle: {
@@ -54,21 +55,12 @@ export const Definitions = {
 
     shooter: {
         body: {
-            path: "./src/assets/shooterBody.png",
-            scale: 0.5,
+            path: "./src/assets/shooterBody1.png",
+            scale: 0.3,
         },
         leg: {
-            path: "./src/assets/shooterLeg.png",
-            scale: 0.5,
+            path: "./src/assets/shooterLeg1.png",
+            scale: 0.3,
         },
     },
 };
-
-export interface GridCell {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    rect: Phaser.GameObjects.Rectangle;
-    text: Phaser.GameObjects.Text;
-}
