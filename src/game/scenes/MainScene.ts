@@ -1,5 +1,9 @@
 import { Definitions } from "../definitions";
 
+enum LookingDirection {
+    Left = 0,
+    Right = 1,
+}
 class MainScene extends Phaser.Scene {
     ball?: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
     grid?: Phaser.Physics.Arcade.StaticGroup;
@@ -7,18 +11,21 @@ class MainScene extends Phaser.Scene {
     shooterLeg?: Phaser.GameObjects.Sprite;
     isShooting: boolean = false;
     isBallInAir: boolean = false;
+    lookingDirection: LookingDirection = LookingDirection.Right;
 
     constructor() {
         super({ key: "MainScene" });
     }
 
     preload() {
+        this.load.image("background", Definitions.background.path);
         this.load.image("ball", Definitions.ball.path);
         this.load.image("shooter", Definitions.shooter.body.path);
         this.load.image("shooterLeg", Definitions.shooter.leg.path);
     }
 
     create() {
+        this.loadBackground();
         this.createGrid();
         this.createBall();
         this.createShooter();
@@ -34,16 +41,52 @@ class MainScene extends Phaser.Scene {
             );
 
             if (!this.isBallInAir)
-                this.ball?.setPosition(pointer.x + 170, this.ball.y);
+                this.ball?.setPosition(
+                    pointer.x + (this.lookingDirection ? 170 : -170),
+                    this.ball.y
+                );
         });
     }
 
     update() {
         if (this.ball?.body.blocked.down) {
+            const randSide = Math.round(Math.random());
+
+            if (randSide == LookingDirection.Left) {
+                this.lookingDirection = LookingDirection.Left;
+                this.shooterContainer?.setScale(-1, 1);
+            } else {
+                this.lookingDirection = LookingDirection.Right;
+                this.shooterContainer?.setScale(1, 1);
+            }
+
             this.resetBall();
         }
+
+        // if (this.shooterContainer && ) {
+        //     if (
+        //         this.shooterContainer.x >= this.game.canvas.width / 2 + 300 &&
+        //         this.lookingDirection === LookingDirection.Left
+        //     ) {
+        //         this.shooterContainer?.setScale(1, 1);
+        //         this.lookingDirection = LookingDirection.Right;
+        //     } else if (
+        //         this.shooterContainer.x <= this.game.canvas.width / 2 - 300 &&
+        //         this.lookingDirection === LookingDirection.Right
+        //     ) {
+        //         this.shooterContainer?.setScale(-1, 1);
+        //         this.lookingDirection = LookingDirection.Left;
+        //     }
+        // }
     }
 
+    private loadBackground() {
+        this.add.image(
+            this.game.canvas.width / 2,
+            this.game.canvas.height / 2,
+            "background"
+        );
+    }
     private createGrid() {
         this.grid = this.physics.add.staticGroup();
 
@@ -113,7 +156,7 @@ class MainScene extends Phaser.Scene {
 
         this.tweens.add({
             targets: this.ball,
-            x: this.shooterContainer!.x + 170,
+            x: this.shooterContainer!.x + (this.lookingDirection ? 170 : -170),
             y: 920,
             duration: 100,
             onComplete: () => {
@@ -129,13 +172,13 @@ class MainScene extends Phaser.Scene {
         );
 
         const shooter = this.add.sprite(0, 0, "shooter");
-        shooter.postFX?.addGlow();
+        shooter.postFX?.addGlow(0xf5d409);
         shooter.setOrigin(0.5, 1);
         shooter.setScale(Definitions.shooter.body.scale);
         shooterContainer.add(shooter);
 
         const shooterLeg = this.add.sprite(-7, -170, "shooterLeg");
-        shooterLeg.postFX?.addGlow();
+        shooterLeg.postFX?.addGlow(0xf5d409);
         shooterLeg.setOrigin(0, 0);
         shooterLeg.setScale(Definitions.shooter.leg.scale);
         shooterContainer.add(shooterLeg);
@@ -181,7 +224,11 @@ class MainScene extends Phaser.Scene {
     };
 
     private shootBall() {
-        this.physics.velocityFromAngle(-60, 1000, this.ball?.body.velocity);
+        this.physics.velocityFromAngle(
+            this.lookingDirection ? -60 : -120,
+            1000,
+            this.ball?.body.velocity
+        );
         this.setBallGlow(0x00ff00);
 
         this.isBallInAir = true;

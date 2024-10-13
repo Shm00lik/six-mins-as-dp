@@ -48,6 +48,10 @@ export const Definitions = {
         },
     },
 
+    background: {
+        path: "./src/assets/background.png",
+    },
+
     ball: {
         path: "./src/assets/ball.png",
         size: 100,
@@ -55,11 +59,11 @@ export const Definitions = {
 
     shooter: {
         body: {
-            path: "./src/assets/shooterBody1.png",
+            path: "./src/assets/shooterBody.png",
             scale: 0.3,
         },
         leg: {
-            path: "./src/assets/shooterLeg1.png",
+            path: "./src/assets/shooterLeg.png",
             scale: 0.3,
         },
     },
