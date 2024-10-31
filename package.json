@@ -10,10 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "antd": "^5.21.5",
     "firebase": "^11.0.1",
     "phaser": "^3.85.2",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.27.0",
+    "scss": "^0.2.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
@@ -24,6 +27,7 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
+    "sass": "^1.80.4",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1"

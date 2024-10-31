@@ -1,7 +1,7 @@
 export const Definitions = {
   grid: {
-    rows: 15,
-    cols: 10,
+    rows: 1,
+    cols: 2,
     gridHeight: 0.7,
 
     rolesList: [
@@ -48,8 +48,12 @@ export const Definitions = {
     },
   },
 
-  background: {
+  backgroundImage: {
     path: "./src/assets/background.png",
+  },
+
+  backgroundVideo: {
+    path: "./src/assets/6minsVideo.mp4",
   },
 
   ball: {
@@ -69,9 +73,36 @@ export const Definitions = {
   },
 
   timer: {
-    textStle: {
+    textStyle: {
       font: "100px Assistant",
       color: "#FFFFFF",
     },
+
+    maxTime: (0 * 60 + 9) * 1000, // minutes * seconds * milliseconds
+  },
+
+  win: {
+    audio: {
+      path: "./src/assets/rizz.ogg",
+    },
+
+    video: {
+      path: "./src/assets/vassilyVideo.mp4",
+    },
+
+    textStle: {
+      font: "254px Assistant",
+      color: "#FFFFFF",
+    },
+  },
+
+  db: {
+    projectId: "six-mins-as-dp-3339",
+    collectionName: "scores",
   },
 };
+
+export interface DBDoc {
+  name: string;
+  score: number;
+}
