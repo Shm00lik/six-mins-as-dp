@@ -8,7 +8,6 @@ import {
   limit,
   orderBy,
   query,
-  Query,
   QueryConstraint,
 } from "firebase/firestore";
 import { Definitions } from "./definitions";

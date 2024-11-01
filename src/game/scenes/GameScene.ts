@@ -228,6 +228,8 @@ class GameScene extends Phaser.Scene {
       | Phaser.Physics.Arcade.Body
       | Phaser.Tilemaps.Tile
   ) => {
+    console.log(ball);
+
     const rect = cell as Phaser.GameObjects.Rectangle;
     const cellRect = rect.getData("text") as Phaser.GameObjects.Text;
 
@@ -247,6 +249,8 @@ class GameScene extends Phaser.Scene {
   }
 
   private onPointerDown = (pointer: Phaser.Input.Pointer) => {
+    console.log(pointer);
+
     if (!this.startTime) {
       this.startTime = this.time.now;
       this.video?.play();
