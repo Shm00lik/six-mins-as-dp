@@ -5,8 +5,13 @@ import {
   DocumentData,
   getDocs,
   getFirestore,
+  limit,
+  orderBy,
+  query,
+  Query,
+  QueryConstraint,
 } from "firebase/firestore";
-import { DBDoc, Definitions } from "./game/definitions";
+import { Definitions } from "./definitions";
 
 const config = {
   projectId: Definitions.db.projectId,
@@ -15,8 +20,13 @@ const config = {
 const app = initializeApp(config);
 const db = getFirestore(app);
 
-const getDocuments = async <T = any>(collectionName: string): Promise<T[]> => {
-  const querySnapshot = await getDocs(collection(db, collectionName));
+const getDocuments = async <T = any>(
+  collectionName: string,
+  queries?: QueryConstraint[]
+): Promise<T[]> => {
+  const querySnapshot = await getDocs(
+    query(collection(db, collectionName), ...(queries || []))
+  );
 
   return querySnapshot.docs.map((doc) => doc.data() as T);
 };
@@ -25,6 +35,22 @@ const addDocument = async (collectionName: string, data: DocumentData) => {
   await addDoc(collection(db, collectionName), data);
 };
 
-export const addRecord = async (data: DBDoc) => {
+export const addScoreRecord = async (data: ScoreDoc) => {
   await addDocument(Definitions.db.collectionName, data);
 };
+
+export const getTopScores = async () => {
+  return getDocuments<ScoreDoc>(Definitions.db.collectionName, [
+    orderBy("score", "desc"),
+    limit(10),
+  ]);
+};
+
+export interface ScoreDoc {
+  name: string;
+  score: number;
+}
+
+// export interface DropoutDoc {
+//   name: string;
+// }

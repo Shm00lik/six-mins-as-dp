@@ -1,4 +1,4 @@
-import { Definitions } from "../definitions";
+import { Definitions } from "../../definitions";
 import { stringifyTime } from "../utils";
 
 class WinScene extends Phaser.Scene {
