@@ -49,25 +49,25 @@ export const Definitions = {
   },
 
   backgroundImage: {
-    path: "./src/assets/background.png",
+    path: "/assets/background.png",
   },
 
   backgroundVideo: {
-    path: "./src/assets/6minsVideo.mp4",
+    path: "/assets/6minsVideo.mp4",
   },
 
   ball: {
-    path: "./src/assets/ball.png",
+    path: "/assets/ball.png",
     size: 100,
   },
 
   shooter: {
     body: {
-      path: "./src/assets/shooterBody.png",
+      path: "/assets/shooterBody.png",
       scale: 0.3,
     },
     leg: {
-      path: "./src/assets/shooterLeg.png",
+      path: "/assets/shooterLeg.png",
       scale: 0.3,
     },
   },
@@ -83,11 +83,11 @@ export const Definitions = {
 
   win: {
     audio: {
-      path: "./src/assets/rizz.ogg",
+      path: "/assets/rizz.ogg",
     },
 
     video: {
-      path: "./src/assets/vassilyVideo.mp4",
+      path: "/assets/vassilyVideo.mp4",
     },
 
     textStle: {
