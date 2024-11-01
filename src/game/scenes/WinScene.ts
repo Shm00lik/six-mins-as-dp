@@ -20,7 +20,7 @@ class WinScene extends Phaser.Scene {
       .add("rizz")
       .setRate(1.35)
       .addListener("complete", () => {
-        this.scene.start("MainScene");
+        window.location.href = "/";
       })
       .play();
 

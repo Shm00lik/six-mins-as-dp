@@ -26,7 +26,7 @@ const Game = () => {
           },
         },
         zoom: 1,
-        backgroundColor: "#FF0000",
+        backgroundColor: "#333339",
       });
     }
   }, []);

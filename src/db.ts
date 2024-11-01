@@ -41,8 +41,8 @@ export const addScoreRecord = async (data: ScoreDoc) => {
 
 export const getTopScores = async () => {
   return getDocuments<ScoreDoc>(Definitions.db.collectionName, [
-    orderBy("score", "desc"),
-    limit(10),
+    orderBy("score", "asc"),
+    limit(5),
   ]);
 };
 

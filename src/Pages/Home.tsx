@@ -5,11 +5,14 @@ import { getTopScores, ScoreDoc } from "../db";
 import { useEffect, useState } from "react";
 import TopTable from "./Table";
 import { stringifyTime } from "../game/utils";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   const [topScores, setTopScores] = useState<ScoreDoc[]>([]);
 
-  const [name, setName] = useState<string | null>(null);
+  const [name, setName] = useState<string | null>(localStorage.getItem("name"));
 
   useEffect(() => {
     getTopScores().then((scores) => setTopScores(scores));
@@ -27,6 +30,24 @@ const Home = () => {
     }
 
     setName(name);
+  };
+
+  const getNameTitle = () => {
+    return (
+      "משחקים בתור: " +
+      name +
+      (name == Definitions.db.otherTeamMemeber ? " (לא חבר קבוצה)" : "")
+    );
+  };
+
+  const handleStartGame = () => {
+    if (!name) {
+      return;
+    }
+
+    localStorage.setItem("name", name);
+
+    navigate("/game");
   };
 
   return (
@@ -57,12 +78,11 @@ const Home = () => {
             options={Definitions.db.teamMembers.map((name) => ({
               value: name,
             }))}
+            defaultValue={localStorage.getItem("name")}
             onChange={handleNameChange}
           />
 
-          {"משחקים בתור: " +
-            name +
-            (name == Definitions.db.otherTeamMemeber ? " (לא חבר קבוצה)" : "")}
+          {name && getNameTitle()}
         </div>
 
         <div className="home__columns--column">
@@ -78,6 +98,7 @@ const Home = () => {
           width: "50%",
         }}
         disabled={!name}
+        onClick={handleStartGame}
       >
         התחל משחק
       </Button>

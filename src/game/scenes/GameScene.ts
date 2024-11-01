@@ -1,3 +1,4 @@
+import { addScoreRecord } from "../../db";
 import { Definitions } from "../../definitions";
 import { stringifyTime } from "../utils";
 
@@ -74,10 +75,17 @@ class GameScene extends Phaser.Scene {
     switch (this.winStatus()) {
       case 1:
         // this.scene.stop("MainScene");
-        this.scene.start("WinScene", { time: this.time.now - this.startTime });
+        const score = this.getTime();
+
+        addScoreRecord({
+          name: localStorage.getItem("name") || Definitions.db.otherTeamMemeber,
+          score: score,
+        });
+        this.scene.start("WinScene", { time: score });
         break;
       case -1:
-        this.scene.start("LoseScene");
+        // this.scene.start("LoseScene");
+        window.location.href = "/";
         break;
       case 0:
       default:
@@ -241,6 +249,7 @@ class GameScene extends Phaser.Scene {
   private onPointerDown = (pointer: Phaser.Input.Pointer) => {
     if (!this.startTime) {
       this.startTime = this.time.now;
+      this.video?.play();
     }
 
     if (!this.isShooting && !this.isBallInAir) this.kickAnimation();
@@ -258,7 +267,7 @@ class GameScene extends Phaser.Scene {
       return;
     }
 
-    this.timer?.setText(stringifyTime(this.time.now - this.startTime));
+    this.timer?.setText(stringifyTime(this.getTime()));
   };
 
   private createVideo = () => {
@@ -273,16 +282,20 @@ class GameScene extends Phaser.Scene {
 
     this.video.setOrigin(1, 1);
     this.video.setPosition(this.game.canvas.width, this.game.canvas.height);
-
-    this.video.play();
   };
 
   private winStatus() {
-    if (this.time.now > Definitions.timer.maxTime) return -1;
+    if (!this.startTime) return 0;
+
+    if (this.getTime() > Definitions.timer.maxTime) return -1;
 
     if (this.grid?.countActive() === 0) return 1;
 
     return 0;
+  }
+
+  private getTime() {
+    return Math.round(this.time.now - this.startTime);
   }
 }
 

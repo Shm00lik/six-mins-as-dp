@@ -1,7 +1,7 @@
 export const Definitions = {
   grid: {
-    rows: 1,
-    cols: 2,
+    rows: 15,
+    cols: 10,
     gridHeight: 0.7,
 
     rolesList: [
@@ -78,7 +78,7 @@ export const Definitions = {
       color: "#FFFFFF",
     },
 
-    maxTime: (0 * 60 + 9) * 1000, // minutes * seconds * milliseconds
+    maxTime: (6 * 60 + 9) * 1000, // minutes * seconds * milliseconds
   },
 
   win: {
