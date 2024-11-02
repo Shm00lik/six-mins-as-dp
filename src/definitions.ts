@@ -1,7 +1,7 @@
 export const Definitions = {
   grid: {
-    rows: 15,
-    cols: 10,
+    rows: 2,
+    cols: 2,
     gridHeight: 0.7,
 
     rolesList: [

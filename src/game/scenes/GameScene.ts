@@ -80,6 +80,7 @@ class GameScene extends Phaser.Scene {
         addScoreRecord({
           name: localStorage.getItem("name") || Definitions.db.otherTeamMemeber,
           score: score,
+          timestamp: Date.now(),
         });
         this.scene.start("WinScene", { time: score });
         break;
