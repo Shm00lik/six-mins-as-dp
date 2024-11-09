@@ -23,8 +23,7 @@ function App() {
           }}
         >
           <img src="/assets/logo.png" style={{ width: "75px" }} />
-
-          <span>קרדיט לטליה</span>
+          קרדיט לטליה
         </div>
 
         <BrowserRouter>
