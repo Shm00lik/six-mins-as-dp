@@ -19,10 +19,12 @@ function App() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            color: "aliceblue",
           }}
         >
           <img src="/assets/logo.png" style={{ width: "75px" }} />
-          קרדיט לטליה
+
+          <span>קרדיט לטליה</span>
         </div>
 
         <BrowserRouter>
