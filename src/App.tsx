@@ -3,6 +3,7 @@ import "./App.css";
 import Home from "./Pages/Home";
 import Game from "./game/Game";
 import { ConfigProvider, theme } from "antd";
+import Tutorial from "./Pages/Tutorial";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="tutorial" element={<Tutorial />} />
             <Route path="/game" element={<Game />} />
           </Routes>
         </BrowserRouter>

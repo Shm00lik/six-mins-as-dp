@@ -1,0 +1,17 @@
+.tutorial {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+
+  &__button {
+    width: 50%;
+    height: 10%;
+    position: absolute;
+    bottom: 10%;
+    right: 5%;
+    z-index: 1;
+    background-color: brown;
+    font-size: larger;
+  }
+}

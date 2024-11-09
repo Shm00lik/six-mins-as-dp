@@ -40,14 +40,14 @@ const Home = () => {
     );
   };
 
-  const handleStartGame = () => {
+  const handleMoveToTutorial = () => {
     if (!name) {
       return;
     }
 
     localStorage.setItem("name", name);
 
-    navigate("/game");
+    navigate("/tutorial");
   };
 
   return (
@@ -92,13 +92,13 @@ const Home = () => {
       </div>
 
       <Button
-        color={name ? "primary" : "primary"}
+        color="primary"
         variant="filled"
         style={{
           width: "50%",
         }}
         disabled={!name}
-        onClick={handleStartGame}
+        onClick={handleMoveToTutorial}
       >
         התחל משחק
       </Button>
