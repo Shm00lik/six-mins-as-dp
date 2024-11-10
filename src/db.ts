@@ -11,6 +11,7 @@ import {
   orderBy,
   query,
   QueryConstraint,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { Definitions } from "./definitions";
@@ -43,18 +44,18 @@ export const addScoreRecord = async (data: ScoreDoc) => {
   const topNameRecord = await getTopRecordByName(data.name);
 
   if (topNameRecord == null) {
-    await addDocument(Definitions.db.collectionName, data);
+    await addDocument(Definitions.db.scoresCollectionName, data);
     return;
   }
 
   if (data.score < topNameRecord.score) {
     await deleteDocument(topNameRecord);
-    await addDocument(Definitions.db.collectionName, data);
+    await addDocument(Definitions.db.scoresCollectionName, data);
   }
 };
 
 export const getTopScores = async () => {
-  return getDocuments<ScoreDoc>(Definitions.db.collectionName, [
+  return getDocuments<ScoreDoc>(Definitions.db.scoresCollectionName, [
     orderBy("score", "asc"),
     limit(5),
   ]);
@@ -68,16 +69,50 @@ const deleteDocument = async (doc: BaseDoc) => {
   await deleteDoc(doc.ref);
 };
 
+const updateDocument = async (doc: BaseDoc, data: DocumentData) => {
+  if (!doc.ref) {
+    return;
+  }
+
+  await updateDoc(doc.ref, data);
+};
+
 const getTopRecordByName = async (name: string) => {
-  const result = await getDocuments<ScoreDoc>(Definitions.db.collectionName, [
-    // orderBy("score", "asc"),
-    where("name", "==", name),
-    orderBy("score", "asc"),
-    limit(1),
-  ]);
+  const result = await getDocuments<ScoreDoc>(
+    Definitions.db.scoresCollectionName,
+    [where("name", "==", name), orderBy("score", "asc"), limit(1)]
+  );
 
   return result.length > 0 ? result[0] : null;
 };
+
+const getDropoutByName = async (name: string) => {
+  const result = await getDocuments<DropoutDoc>(
+    Definitions.db.dropoutsCollectionName,
+    [where("name", "==", name)]
+  );
+
+  return result.length > 0 ? result[0] : null;
+};
+
+const addDropout = async (data: DropoutDoc) => {
+  const currentDropoutData = await getDropoutByName(data.name);
+
+  if (currentDropoutData == null) {
+    await addDocument(Definitions.db.dropoutsCollectionName, {
+      name: data.name,
+      counter: 1,
+    });
+
+    return;
+  }
+
+  await updateDocument(currentDropoutData, {
+    counter: currentDropoutData.counter + 1,
+  });
+};
+
+const removeDropout = async (name: string) => {}
 
 export interface ScoreDoc extends BaseDoc {
   name: string;
@@ -89,6 +124,7 @@ interface BaseDoc {
   ref?: DocumentReference;
 }
 
-// export interface DropoutDoc {
-//   name: string;
-// }
+export interface DropoutDoc extends BaseDoc {
+  name: string;
+  counter: number;
+}

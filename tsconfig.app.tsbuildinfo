@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/db.ts","./src/definitions.ts","./src/main.tsx","./src/vite-env.d.ts","./src/pages/home.tsx","./src/pages/table.tsx","./src/game/game.tsx","./src/game/utils.ts","./src/game/scenes/gamescene.ts","./src/game/scenes/winscene.ts"],"version":"5.6.2"}
+{"root":["./src/app.tsx","./src/db.ts","./src/definitions.ts","./src/main.tsx","./src/vite-env.d.ts","./src/pages/home.tsx","./src/pages/table.tsx","./src/pages/tutorial.tsx","./src/game/game.tsx","./src/game/utils.ts","./src/game/scenes/gamescene.ts","./src/game/scenes/winscene.ts"],"version":"5.6.2"}

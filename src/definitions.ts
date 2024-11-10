@@ -98,7 +98,8 @@ export const Definitions = {
 
   db: {
     projectId: "six-mins-as-dp-3339",
-    collectionName: "scores",
+    scoresCollectionName: "scores",
+    dropoutsCollectionName: "dropouts",
 
     teamMembers: [
       "שירה אביב",
